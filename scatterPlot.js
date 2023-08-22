@@ -24,23 +24,7 @@ export const scatterPlot = () => {
         "#6153CC",
     ];
 
-    // // create a new tooltip object
-    // const tip = d3
-    //     .tip()
-    //     .attr("class", "d3-tip")
-    //     .offset([-10, 0])
-    //     .html((d) => {
-    //         return `<strong>Tau:</strong> <span style='color:red'>${d.tau}</span>`;
-    //     });
-
-    // // add the tooltip to the svg element
-    // svg.call(tip);
-
     const my = (selection) => {
-        // console.log(data.length);
-        // console.log(d3.extent(data, yValue));
-        // console.log(d3.extent(data, xValue));
-
         const x = d3
             .scaleLinear()
             // .domain(d3.extent(data, xValue))
@@ -55,11 +39,18 @@ export const scatterPlot = () => {
             .domain(yDomain)
             .range([height - margin.bottom, margin.top]);
 
+        const colourScale = d3
+            .scaleSequential()
+            .domain(d3.extent(data, colourValue))
+            .interpolator(d3.interpolateViridis);
+
         const marks = data.map((d) => ({
             x: x(xValue(d)),
             y: y(yValue(d)),
             tau: d.tau,
+            degree: d.degree,
             id: d.id,
+            colour: colourScale(colourValue(d)),
         }));
 
         const myTransition = d3.transition().duration(500);
@@ -88,15 +79,12 @@ export const scatterPlot = () => {
             .transition(myTransition)
             .attr("cx", (d) => d.x)
             .attr("cy", (d) => d.y)
-            // id each circle with its id element
             .attr("id", (d) => d.id)
             .style("opacity", 1)
             .attr("r", size)
             .attr("tau", (d) => d.tau)
-            // .attr("fill", (d) => colours[d.tau]);
-            .attr("fill", (d) => colours[1]);
-        // .on("mouseover", tip.show)
-        // .on("mouseout", tip.hide);
+            .attr("fill", (d) => d.colour);
+        // .attr("fill", (d) => colours[1]);
 
         // Add x and y axes
         selection

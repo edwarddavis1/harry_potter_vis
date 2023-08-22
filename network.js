@@ -2,7 +2,7 @@ export const networkPlot = () => {
     let width;
     let height;
     let data;
-    let tau;
+    let colourValue;
     let colours = [
         "#41b6c4",
         "#CA054D",
@@ -14,6 +14,11 @@ export const networkPlot = () => {
 
     const my = (selection) => {
         // const myTransition = d3.transition().duration(1000);
+
+        const colourScale = d3
+            .scaleSequential()
+            .domain(d3.extent(data.nodes, colourValue))
+            .interpolator(d3.interpolateViridis);
 
         const simulation = d3
             .forceSimulation(data.nodes)
@@ -35,6 +40,11 @@ export const networkPlot = () => {
             .attr("stroke-width", (d) => Math.sqrt(d.weight))
             .attr("class", "network");
 
+        // assign each node a colour attribute
+        data.nodes.forEach((d) => {
+            d.colour = colourScale(colourValue(d));
+        });
+
         const node = selection
             .append("g")
             // .attr("stroke", "#fff")
@@ -43,7 +53,7 @@ export const networkPlot = () => {
             .data(data.nodes)
             .join("circle")
             .attr("r", 5)
-            .attr("fill", (_) => colours[1])
+            .attr("fill", (d) => d.colour)
             .attr("tau", (d) => d.tau)
             .attr("class", "network")
             .attr("id", (d) => d.id);
@@ -103,8 +113,8 @@ export const networkPlot = () => {
     my.get_node = function (id) {
         return data.nodes.filter((d) => d.id == id)[0];
     };
-    my.tau = function (_) {
-        return arguments.length ? ((tau = _), my) : tau;
+    my.colourValue = function (_) {
+        return arguments.length ? ((colourValue = _), my) : colourValue;
     };
     return my;
 };

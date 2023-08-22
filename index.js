@@ -30,6 +30,7 @@ async function loadEmbedding() {
     data.forEach((d) => {
         d.x_emb = +d.x_emb;
         d.y_emb = +d.y_emb;
+        d.degree = +d.degree;
     });
 
     return data;
@@ -72,36 +73,16 @@ async function main() {
         .xAxisLabel("Embedding Dimension 1")
         .xDomain(d3.extent(embeddingData, (d) => d.x_emb))
         .yDomain(d3.extent(embeddingData, (d) => d.y_emb))
-        // .yDomain([-1.177, 1.172])
-        // .xDomain([-1.256, 0])
-        .colourValue((d) => d.tau);
+        .colourValue((d) => d.degree);
 
     svg.call(scatter);
 
     const graphData = await loadGraph();
-    // const network = networkPlot()
-    //     .width(width / 2)
-    //     .height(height)
-    //     .data(graphData);
-
-    const springPositions = await loadSpringPositions();
-
     const network = networkPlot()
         .width(width / 2)
         .height(height)
-        .tau((d) => d.tau)
-        // .xDomain(d3.extent(springPositions, (d) => d.x))
-        // .yDomain(d3.extent(springPositions, (d) => d.y))
-
+        .colourValue((d) => d.degree)
         .data(graphData);
-    // .margin({
-    //     top: height / 4,
-    //     right: 50,
-    //     bottom: height / 4,
-    //     left: 30,
-    // })
-    // .precomputedPositions(springPositions);
-
     svg.call(network);
 
     let colours = [
@@ -123,8 +104,8 @@ async function main() {
 
     // Add the mouseover and mouseout events to the scatter plot circles
     svg.selectAll("circle")
-        .on("mouseover", function (_) {
-            console.log(this.getAttribute("tau"));
+        .on("mouseover", function (event) {
+            // console.log(this.getAttribute("tau"));
 
             // Show the tooltip with the data
             tooltip
@@ -134,8 +115,8 @@ async function main() {
                 .style("background-color", colours[0]);
             tooltip
                 .html(this.getAttribute("tau"))
-                .style("left", (window.innerWidth / 4) * 3 + "px")
-                .style("top", window.innerHeight / 2 + "px");
+                .style("left", event.pageX + 10 + "px")
+                .style("top", event.pageY + 10 + "px");
 
             d3.select(this).attr("r", 10);
 
@@ -144,7 +125,8 @@ async function main() {
                     if (d.id == this.id) {
                         return colours[4];
                     } else {
-                        return colours[1];
+                        return d.colour;
+                        // return colours[1];
                     }
                 })
                 .attr("r", (d) => {
@@ -157,12 +139,20 @@ async function main() {
         })
         .on("mouseout", function (d) {
             // Hide the tooltip
-            tooltip.transition().duration(500).style("opacity", 0);
+            tooltip
+                .transition()
+                .duration(500)
+                .style("opacity", 0)
+                .on("end", function () {
+                    // Disable mouse events on the tooltip div when it is hidden
+                    tooltip.style("pointer-events", "none");
+                });
+
             d3.select(this).attr("r", 5).attr("stroke", "none");
 
             d3.selectAll("circle")
                 .attr("fill", (d) => {
-                    return colours[1];
+                    return d.colour;
                 })
                 .attr("r", 5);
         });

@@ -20,6 +20,12 @@ export const networkPlot = () => {
             .domain(d3.extent(data.nodes, colourValue))
             .interpolator(d3.interpolateViridis);
 
+        // make discrete colour scale
+        const colourScaleDisc = d3
+            .scaleOrdinal()
+            .domain(d3.extent(data.nodes, colourValue))
+            .range(colours);
+
         const simulation = d3
             .forceSimulation(data.nodes)
             .force(
@@ -43,6 +49,10 @@ export const networkPlot = () => {
         // assign each node a colour attribute
         data.nodes.forEach((d) => {
             d.colour = colourScale(colourValue(d));
+            //     colour:
+            //         typeof colourValue(d) === "string"
+            //             ? colourScaleDisc(colourValue(d))
+            //             : colourScale(colourValue(d)),
         });
 
         const node = selection

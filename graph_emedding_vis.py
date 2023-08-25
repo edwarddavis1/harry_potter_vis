@@ -72,8 +72,8 @@ degrees = degrees[degrees > 0]
 n = len(nodes)
 # %%
 
-ya = UASE([A.astype(float)], d=2, sparse_matrix=True)
-# ya = unfolded_n2v([A.astype(float)], d=3, sparse_matrix=True, two_hop=True)
+# ya = UASE([A.astype(float)], d=2, sparse_matrix=True)
+# ya = unfolded_n2v([A.astype(float)], d=3, sparse_matrix=True, two_hop=False)
 # ya = PCA(n_components=2).fit_transform(ya)
 
 
@@ -92,13 +92,21 @@ ya = UASE([A.astype(float)], d=2, sparse_matrix=True)
 
 
 # %%
-
+ya = UASE([A.astype(float)], d=2, sparse_matrix=True)
 plot_df = pd.DataFrame({"x_emb": ya[:, 0], "y_emb": ya[:, 1], "tau": nodes})
 plot_df["id"] = np.arange(0, A.shape[0])
 plot_df["degree"] = np.array(A.sum(axis=0)).flatten()
+plot_df["house"] = attributes["house"]
+
+ya = unfolded_n2v([A.astype(float)], d=3, sparse_matrix=True, two_hop=False)
+plot_df_n2v = pd.DataFrame({"x_emb": ya[:, 0], "y_emb": ya[:, 1], "tau": nodes})
+plot_df_n2v["id"] = np.arange(0, A.shape[0])
+plot_df_n2v["degree"] = np.array(A.sum(axis=0)).flatten()
+plot_df_n2v["house"] = attributes["house"]
 # %%
 # # Save as csv
 plot_df.to_csv("data/plot_df.csv")
+plot_df_n2v.to_csv("data/plot_df_n2v.csv")
 #
 from networkx.readwrite import json_graph
 import json
@@ -121,6 +129,7 @@ G = nx.from_numpy_matrix(A)
 # Set tau as a node attribute
 nx.set_node_attributes(G, dict(zip(G.nodes(), nodes)), "tau")
 nx.set_node_attributes(G, dict(zip(G.nodes(), degrees.astype(float))), "degree")
+nx.set_node_attributes(G, dict(zip(G.nodes(), attributes["house"])), "house")
 
 # Save graph as a JSON file
 with open(f"data/emnity_graph.json", "w") as f:

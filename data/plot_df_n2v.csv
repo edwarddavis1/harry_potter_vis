@@ -1,0 +1,52 @@
+,x_emb,y_emb,tau,id,degree,house
+0,0.30984318,0.5165177,Regulus Arcturus Black,0,4,s
+1,0.069848716,-1.196059,Sirius Black,1,12,g
+2,-1.1385568,2.0449474,Lavender Brown,2,1,g
+3,1.9221249,2.3024874,Cho Chang,3,1,r
+4,-2.1850128,2.1193392,Vincent Crabbe,4,3,s
+5,3.276734,3.6642234,"Bartemius ""Barty"" Crouch Sr.",5,2,s
+6,-3.106833,-1.2053455,"Bartemius ""Barty"" Crouch Jr.",6,9,n
+7,1.010413,-1.6911293,Fleur Delacour,7,1,s
+8,1.9502538,2.232175,Cedric Diggory,8,1,n
+9,1.775639,-0.74591285,Albus Dumbledore,9,18,h
+10,-3.2050965,0.9138877,Dudley Dursley,10,2,g
+11,-2.4149303,2.074239,Petunia Dursley,11,4,g
+12,-2.0546615,3.3094466,Vernon Dursley,12,3,m
+13,-1.417236,0.33398157,Argus Filch,13,10,m
+14,-1.8964957,4.4219604,Cornelius Fudge,14,3,m
+15,-2.1969683,2.4128172,Gregory Goyle,15,3,n
+16,1.7669617,-0.46205696,Hermione Granger,16,19,g
+17,2.656111,1.632416,Rubeus Hagrid,17,3,n
+18,2.1131287,2.3859336,Igor Karkaroff,18,1,n
+19,-1.8715317,1.513537,Bellatrix Lestrange,19,11,s
+20,2.3399286,1.9548156,Frank Longbottom,20,1,s
+21,2.4734228,0.3096576,Neville Longbottom,21,2,g
+22,1.6108361,1.1096178,Remus Lupin,22,2,g
+23,-2.7116115,1.7933823,Draco Malfoy,23,7,n
+24,-2.2872045,2.4786158,Lucius Malfoy,24,7,n
+25,-1.0423467,0.9863324,Narcissa Malfoy,25,1,s
+26,2.6417842,1.7826482,Minerva McGonagall,26,6,g
+27,3.1997736,3.2538812,"Alastor ""Mad-Eye"" Moody",27,5,g
+28,-2.0167768,0.30845824,Peter Pettigrew,28,19,g
+29,1.923711,-0.6814207,Harry Potter,29,22,r
+30,1.6197196,0.7661608,James Potter,30,7,r
+31,2.100171,1.2645297,Lily Potter,31,5,g
+32,-0.30185956,2.5697265,Quirinus Quirrell,32,11,s
+33,0.8256245,1.3157265,Tom Riddle Sr.,33,5,s
+34,1.8093017,1.8920729,Mary Riddle,34,1,s
+35,-2.8048637,-1.0238113,Lord Voldemort,35,37,n
+36,-2.218357,3.3232386,Rita Skeeter,36,5,g
+37,1.3381228,2.2786553,Severus Snape,37,4,n
+38,1.4811504,0.45381278,Nymphadora Tonks,38,2,g
+39,-1.8872392,2.3416274,Dolores Janes Umbridge,39,12,g
+40,1.3511596,-2.8028278,Arthur Weasley,40,2,g
+41,2.1542625,1.8854396,Bill Weasley,41,1,g
+42,2.41912,2.4913273,Charlie Weasley,42,1,r
+43,1.9301099,1.288278,Fred Weasley,43,3,m
+44,1.9134436,1.2634717,George Weasley,44,3,m
+45,2.024103,1.5727038,Ginny Weasley,45,2,s
+46,1.5145123,-0.83581465,Molly Weasley,46,3,n
+47,1.9385077,-1.211365,Ron Weasley,47,14,s
+48,1.2049658,-2.3346288,Dobby,48,5,h
+49,-2.7500849,2.0841887,Fluffy,49,4,n
+50,-2.3542583,2.1698143,Aragog,50,4,g

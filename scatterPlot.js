@@ -44,13 +44,24 @@ export const scatterPlot = () => {
             .domain(d3.extent(data, colourValue))
             .interpolator(d3.interpolateViridis);
 
+        // make discrete colour scale
+        const colourScaleDisc = d3
+            .scaleOrdinal()
+            .domain(d3.extent(data, colourValue))
+            .range(colours);
+
         const marks = data.map((d) => ({
             x: x(xValue(d)),
             y: y(yValue(d)),
             tau: d.tau,
             degree: d.degree,
             id: d.id,
-            colour: colourScale(colourValue(d)),
+            // if string, use colourScaleDisc
+            // if number, use colourScale
+            colour:
+                typeof colourValue(d) === "string"
+                    ? colourScaleDisc(colourValue(d))
+                    : colourScale(colourValue(d)),
         }));
 
         const myTransition = d3.transition().duration(500);

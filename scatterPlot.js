@@ -15,14 +15,15 @@ export const scatterPlot = () => {
     let yDomain;
     let yAxisLabel;
     let xAxisLabel;
-    let colours = [
-        "#41b6c4",
-        "#CA054D",
-        "#3B1C32",
-        "#B96D40",
-        "#F9C846",
-        "#6153CC",
-    ];
+    let colours;
+    // let colours = [
+    //     "#41b6c4",
+    //     "#CA054D",
+    //     "#3B1C32",
+    //     "#B96D40",
+    //     "#F9C846",
+    //     "#6153CC",
+    // ];
 
     const my = (selection) => {
         const x = d3
@@ -44,16 +45,15 @@ export const scatterPlot = () => {
             .domain(d3.extent(data, colourValue))
             .interpolator(d3.interpolateViridis);
 
-        // make discrete colour scale
         const colourScaleDisc = d3
             .scaleOrdinal()
-            .domain(d3.extent(data, colourValue))
-            .range(colours);
+            .domain(Object.keys(colours))
+            .range(Object.values(colours));
 
         const marks = data.map((d) => ({
             x: x(xValue(d)),
             y: y(yValue(d)),
-            tau: d.tau,
+            name: d.name,
             degree: d.degree,
             id: d.id,
             // if string, use colourScaleDisc
@@ -64,10 +64,46 @@ export const scatterPlot = () => {
                     : colourScale(colourValue(d)),
         }));
 
-        const myTransition = d3.transition().duration(500);
+        const myTransition = d3.transition().duration(200);
+
+        const node_trace = selection
+            .append("g")
+            .selectAll("g")
+            .data(marks)
+            .join(
+                (enter) =>
+                    enter
+                        .append("circle")
+                        .attr("r", 5)
+                        .style("opacity", 0)
+                        .attr("cx", (3 * width) / 4)
+                        .attr("cy", height / 2),
+                // .call((enter) =>
+                //     enter
+                //         .transition(myTransition)
+                //         .delay((d, i) => i * 0)
+                // ),
+                (update) =>
+                    update.call((update) =>
+                        update.transition(myTransition).delay((d, i) => i * 0)
+                    )
+            )
+            // .transition(myTransition)
+            .attr("cx", (d) => d.x)
+            .attr("cy", (d) => d.y)
+            .attr("id", (d) => d.id)
+            .style("pointer-events", "none")
+            .style("opacity", 0.01)
+            .attr("class", "scatterPointsTrace")
+            .attr("r", size)
+            .attr("name", (d) => d.name)
+            .attr("degree", (d) => d.degree)
+            .attr("house", (d) => d.house)
+            .attr("good_bad", (d) => d.good_bad)
+            .attr("fill", (d) => d.colour);
 
         const nodes = selection
-            .selectAll("circle")
+            .selectAll(".scatterPoints")
             .data(marks)
             .join(
                 (enter) =>
@@ -80,11 +116,11 @@ export const scatterPlot = () => {
                         .call((enter) =>
                             enter
                                 .transition(myTransition)
-                                .delay((d, i) => i * 3)
+                                .delay((d, i) => i * 0)
                         ),
                 (update) =>
                     update.call((update) =>
-                        update.transition(myTransition).delay((d, i) => i * 7)
+                        update.transition(myTransition).delay((d, i) => i * 0)
                     )
             )
             .transition(myTransition)
@@ -92,8 +128,12 @@ export const scatterPlot = () => {
             .attr("cy", (d) => d.y)
             .attr("id", (d) => d.id)
             .style("opacity", 1)
+            .attr("class", "scatterPoints")
             .attr("r", size)
-            .attr("tau", (d) => d.tau)
+            .attr("name", (d) => d.name)
+            .attr("degree", (d) => d.degree)
+            .attr("house", (d) => d.house)
+            .attr("good_bad", (d) => d.good_bad)
             .attr("fill", (d) => d.colour);
         // .attr("fill", (d) => colours[1]);
 
@@ -141,48 +181,6 @@ export const scatterPlot = () => {
             .attr("y", margin.top + height - margin.top - margin.bottom + 20)
             .attr("class", "xAxisLabel") // This ensures that multiple labels don't plot when animating
             .text(xAxisLabel);
-
-        // // Node highlighing on hover
-        // d3.selectAll("circle")
-        //     .on("mouseover", function (_) {
-        //         d3.select(this)
-        //             .attr("r", 10)
-        //             .attr("stroke", "black")
-        //             .attr("stroke-width", 2);
-        //     })
-        //     .on("mouseout", function (_) {
-        //         d3.select(this).attr("r", 5).attr("stroke", "none");
-        //     });
-
-        d3.selectAll("circle")
-            .on("mouseover", function (_) {
-                d3.select(this).attr("r", 10);
-
-                d3.selectAll("circle")
-                    .attr("fill", (d) => {
-                        if (d.id == this.id) {
-                            return colours[4];
-                        } else {
-                            return colours[0];
-                        }
-                    })
-                    .attr("r", (d) => {
-                        if (d.id == this.id) {
-                            return 10;
-                        } else {
-                            return 5;
-                        }
-                    });
-            })
-            .on("mouseout", function (_) {
-                d3.select(this).attr("r", 5).attr("stroke", "none");
-
-                d3.selectAll("circle")
-                    .attr("fill", (d) => {
-                        return colours[0];
-                    })
-                    .attr("r", 5);
-            });
     };
 
     my.width = function (_) {
@@ -226,6 +224,9 @@ export const scatterPlot = () => {
     };
     my.tau = function (_) {
         return arguments.length ? ((tau = _), my) : tau;
+    };
+    my.colours = function (_) {
+        return arguments.length ? ((colours = _), my) : colours;
     };
 
     return my;

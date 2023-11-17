@@ -378,3 +378,27 @@ def make_iid_close_power(n, T=2, max_exp_deg=6, beta=2.5, change_prob=0.9, w_par
         As[t] = A_t
 
     return As
+
+
+def sbm_from_B(B, n):
+    T = len(B)
+    K = B[0].shape[0]
+
+    # Ensure equal community sizes
+    if n % K != 0:
+        raise ValueError("n must be divisible by the number of communities")
+    
+    tau = np.repeat(np.arange(0, K), int(n / K))
+    np.random.shuffle(tau)
+
+    # Generate adjacency matrices
+    As = np.zeros((T, n, n))
+    for t in range(T):
+        P_t = np.zeros((n, n))
+        for i in range(n):
+            P_t[:, i] = B[t][tau, tau[i]]
+
+        A_t = np.random.uniform(0, 1, n**2).reshape((n, n)) < P_t
+        As[t] = A_t
+
+    return (As, tau)

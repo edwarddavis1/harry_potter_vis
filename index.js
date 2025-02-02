@@ -200,7 +200,7 @@ async function main() {
         .xDomain(d3.extent(embeddingData, (d) => d.x_emb))
         .yDomain(d3.extent(embeddingData, (d) => d.y_emb))
         .colours(goodBadColours)
-        .colourValue((d) => d.degree);
+        .colourValue((d) => d.good_bad);
 
     svg.call(scatter);
 
@@ -209,7 +209,7 @@ async function main() {
     const network = networkPlot()
         .width((2 * width) / 5)
         .height(height)
-        .colourValue((d) => d.degree)
+        .colourValue((d) => d.good_bad)
         .colours(goodBadColours)
         .data(graphData);
 
@@ -236,6 +236,13 @@ async function main() {
         "#F9C846",
         "#6153CC",
     ];
+
+    // Default colours
+    scatter.colours(goodBadColours);
+    scatter.colourValue((d) => d.good_bad);
+    network.colours(goodBadColours);
+    network.colourValue((d) => d.good_bad);
+    fillLegend(goodBadColours, goodBadCategories, false, "Good/Bad Characters");
 
     /////////////////////////////
     //// Interactiveness ////////
@@ -357,11 +364,12 @@ async function main() {
         .style("background-color", colours[0])
         .style("color", "#fff")
         .style("font-size", "16px")
-        .style("cursor", "pointer");
+        .style("cursor", "pointer")
+        .property("value", "Good/Bad");
 
     const options = select
         .selectAll("option")
-        .data(["Degree", "House", "Good/Bad", "Main Characters"])
+        .data(["Good/Bad", "House", "Degree", "Main Characters"])
         .enter()
         .append("option")
         .text((d) => d)
@@ -371,17 +379,7 @@ async function main() {
     select.on("change", () => {
         const value = select.property("value");
         svg.selectAll("circle, .networkLinks").remove();
-        if (value === "Degree") {
-            scatter.colourValue((d) => d.degree);
-            network.colourValue((d) => d.degree);
-            fillLegend(degreeColours, d3.extent(degreeValues), true, "Degree");
-        } else if (value === "House") {
-            scatter.colours(houseColours);
-            scatter.colourValue((d) => d.house);
-            network.colours(houseColours);
-            network.colourValue((d) => d.house);
-            fillLegend(houseColours, houseCategories, false, "House");
-        } else if (value === "Good/Bad") {
+        if (value === "Good/Bad") {
             scatter.colours(goodBadColours);
             scatter.colourValue((d) => d.good_bad);
             network.colours(goodBadColours);
@@ -392,6 +390,16 @@ async function main() {
                 false,
                 "Good/Bad Characters"
             );
+        } else if (value === "House") {
+            scatter.colours(houseColours);
+            scatter.colourValue((d) => d.house);
+            network.colours(houseColours);
+            network.colourValue((d) => d.house);
+            fillLegend(houseColours, houseCategories, false, "House");
+        } else if (value === "Degree") {
+            scatter.colourValue((d) => d.degree);
+            network.colourValue((d) => d.degree);
+            fillLegend(degreeColours, d3.extent(degreeValues), true, "Degree");
         } else if (value === "Main Characters") {
             scatter.colours(topFiveColours);
             scatter.colourValue((d) => d.main);

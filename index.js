@@ -242,7 +242,7 @@ async function main() {
     scatter.colourValue((d) => d.good_bad);
     network.colours(goodBadColours);
     network.colourValue((d) => d.good_bad);
-    fillLegend(goodBadColours, goodBadCategories, false, "Good/Bad Characters");
+    fillLegend(goodBadColours, goodBadCategories, false, "Good/Bad");
 
     /////////////////////////////
     //// Interactiveness ////////
@@ -384,12 +384,7 @@ async function main() {
             scatter.colourValue((d) => d.good_bad);
             network.colours(goodBadColours);
             network.colourValue((d) => d.good_bad);
-            fillLegend(
-                goodBadColours,
-                goodBadCategories,
-                false,
-                "Good/Bad Characters"
-            );
+            fillLegend(goodBadColours, goodBadCategories, false, "Good/Bad");
         } else if (value === "House") {
             scatter.colours(houseColours);
             scatter.colourValue((d) => d.house);
